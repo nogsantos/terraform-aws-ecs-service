@@ -4,6 +4,40 @@ variable "cluster_listener" {}
 variable "cluster_name" {}
 variable "cluster_id" {}
 variable "service_name" {}
+variable "dns_name" {}
+variable "route_zone_id" {}
+variable "route_zone_name" {}
+variable "variables" {
+  type = object({
+    environment = list(
+      object({
+        name      = string
+        valueFrom = string
+      })
+    )
+    secrets = list(
+      object({
+        name      = string
+        valueFrom = string
+      })
+    )
+  })
+  default = {
+    environment = []
+    secrets     = []
+  }
+  description = "Environment parameters"
+}
+variable "environment_data" {
+  type = object({
+    vpc_id        = string
+    vpc_ipv4_cird = string
+    subnets       = list(string)
+  })
+  description = "Environment network configurations"
+}
+
+variable "service_base_path" { type = list(any) }
 variable "region" { default = "us-east-1" }
 variable "service_protocol" { default = "http" }
 variable "service_launch_type" { default = "EC2" }
@@ -32,35 +66,3 @@ variable "cpu_to_scale_up" { default = 80 }
 variable "cpu_to_scale_down" { default = 30 }
 variable "cpu_verification_period" { default = 60 }
 variable "cpu_evaluation_periods" { default = 5 }
-variable "service_base_path" {
-  type = list(any)
-}
-variable "availability_zones" {}
-variable "dns_name" {}
-variable "route_zone_id" {}
-variable "route_zone_name" {}
-variable "environment_data" {
-  type = object({
-    vpc_id        = string
-    vpc_ipv4_cird = string
-    subnets       = list(string)
-  })
-  description = "Environment network configurations"
-}
-
-variable "env" {
-  type = list(
-    object({
-      name  = string
-      value = string
-    })
-  )
-}
-variable "secrets" {
-  type = list(
-    object({
-      name      = string
-      valueFrom = string
-    })
-  )
-}

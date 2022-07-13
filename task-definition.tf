@@ -41,14 +41,7 @@ resource "aws_ecs_task_definition" "task" {
         awslogs-stream-prefix = var.service_name
       }
     }
-    healthCheck = {
-      retries     = 3,
-      command     = ["CMD-SHELL", "curl -f http://localhost:${var.container_port}/healthcheck || exit 1"],
-      timeout     = 5,
-      interval    = 30,
-      startPeriod = null
-    }
-    environment = var.env
-    secrets     = var.secrets
+    environment = lookup(var.variables, "environment", [])
+    secrets     = lookup(var.variables, "secrets", [])
   }])
 }
